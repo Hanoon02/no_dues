@@ -641,3 +641,19 @@ sendAll.addEventListener("click", () => {
     applyStatus();
   }
 });
+
+function updatePendingRequestsCounter() {
+  var request = new XMLHttpRequest();
+  request.open("GET", `${CURRENT_URL}/getPendingRequestsCount`, true);
+  request.onreadystatechange = function () {
+    if (request.readyState === 4 && request.status === 200) {
+      var response = JSON.parse(request.responseText);
+      var counterElement = document.getElementById("pendingRequestsCounter");
+      if (counterElement) {
+        counterElement.textContent = response.count;
+      }
+    }
+  };
+  request.send();
+}
+window.addEventListener("load", updatePendingRequestsCounter);
