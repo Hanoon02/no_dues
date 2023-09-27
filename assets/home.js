@@ -119,6 +119,7 @@ function createRequest(admin) {
           <div class="accordion-body">
 
             ${customInfo(admin)}        
+            ${undertaking()}        
             <p>Admin :  ${displayName} [${displayAddress}]</p>
             <p>Message: <span class="${admin+'Message'}"> ${displayMessage}</span></p>
             <p>Fine: <span class="${admin+'Fine'}">${displayFine}</span></p>
@@ -147,6 +148,16 @@ function customInfo(admin) {
   } else {
     return "";
   }
+}
+
+function undertaking() {
+    return `<br>
+            Have you returned all the equipment and items?
+            <br>
+            <input type="radio" id="returned" name="itemsTaken" value=true>
+            <label for="returned">Yes</label><br>
+            <input type="radio" id="notReturned" name="itemsTaken" value=false>
+            <label for="notReturned">No </label><hr>`;
 }
 
 //Creating requests for each admin
@@ -234,6 +245,11 @@ function getAdminName(s) {
     newName = newName + arr[i][0].toUpperCase() + arr[i].substring(1);
   }
   return newName;
+}
+
+//Undertaking Modal
+function undertakingModal() {
+
 }
 
 //Sending Request
