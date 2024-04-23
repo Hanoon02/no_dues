@@ -117,7 +117,6 @@ function createRequest(admin) {
       <div class="accordion-content row">
 
           <div class="accordion-body">
-
             ${customInfo(admin)}        
             ${undertaking()}        
             <p>Admin :  ${displayName} [${displayAddress}]</p>
@@ -655,7 +654,6 @@ var profilebtn = document.getElementById("profile");
 profilebtn.addEventListener("click", () => {
   var obj = {};
   obj.user = JSON.stringify(user);
-
   window.location.href = `${CURRENT_URL}/profile`;
 });
 

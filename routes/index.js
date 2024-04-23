@@ -8,6 +8,7 @@ router.get(
   "/",
   passport.checkAuthentication,
   passport.checkUserAuthentication,
+  passport.checkStaff,
   homeController.home
 );
 router.get(
@@ -223,6 +224,8 @@ router.get(
 );
 
 router.use("/user", require("./user"));
+
+router.use("/staff", require("./staff"));
 
 router.all("*", function (req, res) {
   req.flash("error", "Please Try Again or Later!");

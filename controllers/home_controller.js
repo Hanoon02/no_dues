@@ -491,7 +491,6 @@ module.exports.sendMessage = (req, res) => {
 module.exports.approveDues = (req, res) => {
   try {
     var obj = JSON.parse(req.params.dues);
-
     User.findOne({ email: obj[0].email }, async (err, user) => {
       if (err) {
         console.log(err);

@@ -10,6 +10,7 @@ var admins_data;
 //     });
 
 var admins_data = require("../data/admins.json");
+var staff_admin_data = require("../data/staffAdmins.json");
 
 function changeNameFormat(name) {
   if (name.substring(0, 9) == "Academics") {
@@ -28,9 +29,14 @@ function changeNameFormat(name) {
 
 var adminNames = {};
 var names = [];
+var staffNames = [];
 for (var i in admins_data) {
   adminNames[admins_data[i][1]] = changeNameFormat(admins_data[i][0]);
   names.push(changeNameFormat(admins_data[i][0]));
+}
+
+for (var i in staff_admin_data) {
+  staffNames.push(changeNameFormat(staff_admin_data[i][0]));
 }
 
 const mongoose = require("mongoose");
@@ -88,6 +94,7 @@ var schemaObject = {
   hostelTaken: { type: Boolean, default: undefined },
   donationAdmin: { type: String, default: 'None' },
   donationAmount: {type: Number, default: 0},
+  staffRequestNoDues: {type: String, default: 'None'},
   totalFine: {type:Number, default: 0},
 };
 
@@ -98,6 +105,15 @@ for (var i = 0; i < names.length; i++) {
   schemaObject[names[i] + "ApprovedAt"] = { type: String };
   schemaObject[names[i] + "Message"] = { type: String };
   schemaObject[names[i] + "Fine"] = { type: Number, default: 0 };
+}
+
+for (var i = 0; i < staffNames.length; i++) {
+  schemaObject[staffNames[i]] = { type: Boolean };
+  schemaObject[staffNames[i] + "Applied"] = { type: Boolean };
+  schemaObject[staffNames[i] + "AppliedAt"] = { type: String };
+  schemaObject[staffNames[i] + "ApprovedAt"] = { type: String };
+  schemaObject[staffNames[i] + "Message"] = { type: String };
+  schemaObject[staffNames[i] + "Fine"] = { type: Number, default: 0 };
 }
 
 const userSchema = new mongoose.Schema(schemaObject, {

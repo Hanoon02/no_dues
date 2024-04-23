@@ -3,6 +3,7 @@ const googleStrategy = require("passport-google-oauth").OAuth2Strategy;
 const crypto = require("crypto");
 const User = require("../models/user");
 const getProffName = require("../data/getProffName");
+const getStaffName = require("../data/isStaff");
 const Admin = require("../models/admin");
 const fs = require("fs");
 const { google } = require("googleapis");
@@ -207,6 +208,39 @@ passport.use(
                 password: crypto.randomBytes(20).toString("hex"),
                 image: profile.photos[0].value,
                 type: "Proff",
+              },
+              (err, user) => {
+                if (err) {
+                  console.log(
+                    "Error in creating user google strategy-passport",
+                    err
+                  );
+                  return;
+                }
+                return done(null, user);
+              }
+            );
+          }
+        });
+      } else if(getStaffName.isStaff(profile.emails[0].value)){
+        User.findOne({ email: profile.emails[0].value }).exec((err, user) => {
+          if (err) {
+            console.log("Error in google strategy passport", err);
+            return;
+          }
+          if (user) {            
+            user['type']='staff';
+            user["name"] = profile.name["givenName"];
+            user.save();           
+            return done(null, user);
+          } else {
+            User.create(
+              {
+                name: profile.name["givenName"],
+                email: profile.emails[0].value,
+                password: crypto.randomBytes(20).toString("hex"),
+                image: profile.photos[0].value,
+                type: "Staff",
               },
               (err, user) => {
                 if (err) {

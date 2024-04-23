@@ -1,0 +1,194 @@
+
+/* Requests list */
+.list{
+    min-height: 60vh;
+    overflow-y: auto;
+  }
+  
+  /* Pending Rejected Accepted */
+  .navbar-custom-inner .navbar-nav .nav-link {
+    color: #3b3b3b;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .navbar-custom-inner .navbar-nav .nav-link:hover {
+    color: #000000;
+  }
+  
+  .navbar-custom-inner .navbar-nav .nav-item {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .navbar-custom-inner .navbar-nav .nav-item::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    background-color: #131313;
+    width: 0%;
+    content: "";
+    height: 2px;
+    transition: all 0.5s;
+  }
+  
+  .navbar-custom-inner .navbar-nav .nav-item:hover::after {
+    width: 90%;
+  }
+  
+  .navbar-custom-inner .navbar-nav .status::after {
+    width: 90%;
+  }
+  
+  .navbar-custom-inner .navbar-nav .status {
+    color: #000000;
+  }
+  
+  
+  /* Filters */
+  
+  .filter,
+  .filter option {
+    width: 8rem;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .filter:focus{
+    box-shadow: none;
+  }
+  
+  .batch-filter{
+    width: 10rem;
+    transition: all 0.3s ease-in-out;
+  }
+  .batch-filter input:focus,.batch-filter button:focus{
+    outline:none;
+    box-shadow: none;
+  }
+  
+  .batch-filter button:hover{
+    background-color: #60aca6;
+    border-color: #60aca6;
+  }
+  
+  
+  /* Utility */
+  
+  .utility{
+    width: 30rem;
+    font-size:0.9rem;  
+  }
+  
+  .utility button{
+    background-color: #60aca6;
+    border-color: #ced4da;
+    color: white;
+    transition: all 300ms linear;
+    text-align:center;
+  }
+  .utility button:hover {
+    background-color: #487e79;
+    color: white;
+    border-color: #487e79;
+    outline:none;
+    box-shadow: none;
+    transition: all 300ms linear ;
+  }
+  .utility button:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  
+  /* Accordion */
+  
+  .accordion .accordion-item {
+    border: 0;
+    border-bottom: 1px solid #e5e5e5;
+  }
+  
+  .accordion .accordion-item:hover {
+    border-bottom: 1px solid #60aca6;
+  }
+  
+  .accordion .accordion-heading[aria-expanded=true] {
+    color: #60aca6;
+    border-bottom: 1px solid #60aca6;
+  }
+  
+  .accordion .accordion-heading:hover {
+    color: #60aca6;
+  }
+  
+  .accordion .accordion-heading {
+    position: relative;
+    text-align: left;
+    width: 100%;
+    padding: 1rem 0;
+    color: #7288a2;
+    font-size: 1.15rem;
+    font-weight: 400;
+    border: none;
+    background: none;
+    outline: none;
+  }
+  
+  
+  /* Accordion Content */
+  
+  .accordion .accordion-heading[aria-expanded=true]+.accordion-content {
+    opacity: 1;
+    max-height: 20em;
+    overflow-y: auto;
+    transition: all 200ms linear;
+    will-change: opacity, max-height;
+  }
+  
+  .accordion .accordion-heading[aria-expanded=false]+.accordion-content {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 200ms linear, max-height 200ms linear;
+    will-change: opacity, max-height;
+  }
+  
+  /* Accordion Icon */
+  
+  .accordion .accordion-heading[aria-expanded=true] .up {
+    display: block;
+  }
+  
+  .accordion .accordion-heading[aria-expanded=true] .down {
+    display: none;
+  }
+  
+  .accordion .accordion-heading[aria-expanded=false] .up {
+    display: none;
+  }
+  
+  .accordion .accordion-heading[aria-expanded=false] .down {
+    display: block;
+  }
+  
+  .accordion .accordion-heading i {
+    font-size: 1.25rem;
+  }
+  
+  /* Accordion Forms */
+  
+  .accordion-body .custom-form input{
+    width: 16rem;
+  }
+  
+  .accordion-body .custom-form input:focus {
+    outline:none;
+    box-shadow: none;
+  }
+  
+  .accordion-body .custom-form .message{
+    width: 80%;
+  }
+  
+  

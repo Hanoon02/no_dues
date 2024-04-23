@@ -17,6 +17,7 @@ const https = require("https");
 //const professorsList = require('./config/professors');
 const fs = require("fs");
 const Admin = require("./models/admin");
+const StaffAdmin = require("./models/staffAdmin")
 const expressLayouts = require("express-ejs-layouts");
 
 const app = express();
@@ -76,12 +77,20 @@ app.listen(port, async (err) => {
     auth: auth,
     spreadsheetId: spreadsheetId,
   });
+
   var data = await googleSheets.spreadsheets.values.get({
     auth: auth,
     spreadsheetId: spreadsheetId,
     range: "Sheet1",
   });
+  var data2 = await googleSheets.spreadsheets.values.get({
+    auth: auth,
+    spreadsheetId: '1fU7tS-rl8fkihkwkLoL_HfoBM5vqj3NAAFUvJm5KFs4',
+    range: "Sheet1",
+  });
+
   global.admins_data = data.data.values;
+  global.staff_admin_data = data2.data.values;
 
   fs.readFile("./data/admins.json", (err, data) => {
     if (err) {
@@ -103,6 +112,8 @@ app.listen(port, async (err) => {
   });
   Admin.db.collection.drop();
   Admin.addAdmins(global.admins_data);
+  StaffAdmin.db.collection.drop();
+  StaffAdmin.addAdmins(global.staff_admin_data);
 
   //Professors List
   var spreadsheetId = "1L-mCmog-GlNVKQlV_6Jvo9WyQKZpr-S346ijUlPj0gM";

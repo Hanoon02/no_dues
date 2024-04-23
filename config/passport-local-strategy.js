@@ -3,6 +3,7 @@ const { google } = require("googleapis");
 const LocalStrategy = require("passport-local").Strategy;
 const Admin = require("../models/admin");
 const getProffName = require("../data/getProffName");
+const getStaffName = require("../data/isStaff")
 
 const User = require("../models/user");
 const { EMAIL_ID, SUPER_ADMIN_EMAIL,MAIN_EXCEL_ID,BANK_EXCEL_ID } = require("../config/config");
@@ -126,6 +127,16 @@ passport.checkProffAuthentication = (req, res, next) => {
   }
   req.flash("error", "Invalid Access");
   return res.redirect("/user/signin");
+};
+
+//Check for Staff or Student
+passport.checkStaff = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    if (getStaffName.isStaff(req.user.email)) {
+      return res.redirect("/staff");
+    }
+  }
+  next();
 };
 
 //check if superAdmin
