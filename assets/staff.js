@@ -1,4 +1,3 @@
-// const TEST_USER = [{"donationAdmin":"None","donationAmount":0,"totalFine":0,"adminFine":0,"designLabFine":0,"libraryFine":0,"adminFacilitiesFine":0,"systemAdminAndNetworkingFine":0,"sportsAndStudentFacilitiesFine":0,"hostelFine":0,"eceLabsFine":0,"placementInchargeFine":0,"incubationCenterFine":0,"researchAndProjectFine":0,"financeFine":0,"academicsFine":0,"adminCSEFine":0,"adminECEFine":0,"adminMathsFine":0,"adminSSHFine":0,"adminHCDFine":0,"adminCBFine":0,"alumniDepartmentFine":0,"_id":"64fffbc45c8ee4c077a82678","name":"Ahmed Hanoon","email":"ahmed21006@iiitd.ac.in","password":"2c3eda60a8c9d4251480479188ea71d85f85ff7b","image":"https://lh3.googleusercontent.com/a/ACg8ocKYFGe_Sd6cr5vDK3DECbwDRDH0GlTKN-E6RRKGjPMkKw=s96-c","designLabApplied":false,"libraryApplied":false,"adminFacilitiesApplied":false,"systemAdminAndNetworkingApplied":false,"sportsAndStudentFacilitiesApplied":false,"hostelApplied":false,"eceLabsApplied":false,"placementInchargeApplied":false,"incubationCenterApplied":false,"researchAndProjectApplied":false,"financeApplied":false,"academicsApplied":false,"ipList":[],"btpList":[],"gender":"male","department":"CSE","degree":"B. Tech","roll":"2021006","batch":2025,"createdAt":"2023-09-12T05:48:52.831Z","updatedAt":"2023-09-12T05:48:52.831Z","__v":0}]
 var user = JSON.parse(document.getElementById("user").innerHTML);
 const CURRENT_URL = JSON.parse(
   document.getElementById("CURRENT_URL").innerHTML
@@ -19,28 +18,46 @@ if (request.status === 200) {
 var container = document.getElementsByClassName('requests-list')[0];
 var request_button_container = document.getElementById('request-dues-container');
 
-function duesRequestButton(){
-  if(user[0]['staffRequestNoDues']==='None'){
-      request_button_container.innerHTML += `
-      <div class='details-heading row mx-0 mb-2'>
-        <h4>Request for your dues</h4>
-        <button class="row" type="button" onClick="handleDuesRequest()">
-          Request
-        </button>
-      </div>
-    `
-  }
+// function duesRequestButton(){
+//   if(user[0]['staffRequestNoDues']==='None'){
+//       request_button_container.innerHTML += `
+//       <div class='details-heading row mx-0 mb-2'>
+//         <h4 class='custom-title'>Request for your dues</h4>
+//         <button type="button" class='mt-4 submit-btn' onClick="handleDuesRequest()">
+//           Request
+//         </button>
+//       </div>
+//     `
+//   }
+// }
+// duesRequestButton()
+if(user[0]['staffRequestNoDues']==='Complete'){
+  admins_list.map(createRequest);
 }
-duesRequestButton()
+else if(user[0]['staffRequestNoDues']==='Active'){
+  container.innerHTML+=`
+  <div class="centered">
+    <p> The admins have been notified of your request for dues, kindly wait for them to approve</p>
+    <div>
+  `
+}
+else{
+  container.innerHTML+=`
+    <div class="centered">
+      <p class='pt-2 text-center'> You have not initiated your No Dues process, kindly click the below button to start the process</p>
+      <button type="button" id='initatebtn' class="btn btn-outline-primary" onClick="handleDuesRequest()">
+        Initiate No Dues Process
+      </button>
+    <div>
+  `
+}
 
 function handleDuesRequest(){
   var request = new XMLHttpRequest();
   request.open("GET", `${CURRENT_URL}/staff/requestForDues/${user[0].email}`, false);
   request.send(null);
-  // var request = new XMLHttpRequest();
-  // request.open("GET", `${CURRENT_URL}/staff/getAdmins`, false);
-  // request.send(null);
   console.log(request.responseText)
+  window.location.reload();
 }
 
 function createRequest(admin) {
@@ -131,21 +148,6 @@ function createRequest(admin) {
               <input type="radio" id="notReturned" name="itemsTaken" value=false>
               <label for="notReturned">No </label><hr>`;
   }
-  if(user[0]['staffRequestNoDues']==='Complete'){
-    admins_list.map(createRequest);
-  }
-  else if(user[0]['staffRequestNoDues']==='Active'){
-    container.innerHTML+=`
-      <p> The admins have been notified of your request for dues, kindly wait for them to appro</p>
-    `
-  }
-  else{
-    container.innerHTML+=`
-      <p> You have not requested for any dues, kindly request for more</p>
-    `
-  }
-
-
   function toggleaccordion() {
     const items = document.querySelectorAll(".accordion button");
     const itemToggle = this.getAttribute("aria-expanded");
@@ -238,6 +240,6 @@ function requestFunction(event) {
       hostelTaken: hostelTaken,
     });
     console.log(obj)
-    window.location.href = `${CURRENT_URL}/request/${JSON.stringify(obj)}`;
+    window.location.href = `${CURRENT_URL}/staff/request/${JSON.stringify(obj)}`;
   }
   

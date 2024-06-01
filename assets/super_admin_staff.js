@@ -670,56 +670,102 @@ const CURRENT_URL = JSON.parse(
   // }
   // window.addEventListener("load", updatePendingRequestsCounter);
 
-pending_container = document.getElementById('pending-no-dues')
+  pending_container = document.getElementById('pending-no-dues')
+  let selectedAdmins = []
+  function createRequestsDues(){
+      let staffList;
+      var request = new XMLHttpRequest();
+      request.open("GET", `${CURRENT_URL}/staff/getRequestedDuesStaff`, true); // Make the request asynchronous
+      request.onload = function() {
+          if (request.status === 200) {
+              staffList = JSON.parse(request.responseText);    
+          }
+          if (staffList && pending_container) {
+              selectedAdmins = []
+              if(staffList.length > 0){
+                  let tableHTML = `
+                      <table>
+                          <thead>
+                              <tr>
+                                  <th style="padding-right: 20px;">Name</th>
+                                  <th style="padding-right: 20px;">Email</th>
+                                  <th style="padding-right: 20px;">Choose Departments</th>
+                                  <th>Action</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                  `;
+                  staffList.forEach(staff => {
+                      tableHTML += `
+                          <tr>
+                              <td style="padding-right: 20px;">${staff.name}</td>
+                              <td style="padding-right: 20px;">${staff.email}</td>
+                              <td style="padding-right: 20px;" class='dues-dropdown'>
+                                <select id="choose-dues" multiple>
+                                </select>
+                              </td>
+                              <td>
+                                <div class="btn-group utility mt-2 mb-2" role="group">
+                                <button type="button" class="btn mx-2" onclick="approveStaff('${staff.email}', true)">Initiate All Departments</button>
+                                  <button type="button" class="btn mx-2" onclick="approveStaff('${staff.email}')">Initiate for Selected Departments</button>
+                                  <button type="button" class="btn mx-2" onclick="rejectStaff('${staff.email}')">Reject Request</button>
+                                </div>
+                              </td>
+                          </tr>
+                      `;
+                  });
+                  tableHTML += `
+                          </tbody>
+                      </table>
+                  `;
+                  pending_container.innerHTML += tableHTML;
+                  const selectElement = document.querySelector('#choose-dues');
+                  staffAdminList.forEach(admin => {
+                      let option = document.createElement('option');
+                      option.value = admin;
+                      option.text = admin;
 
-function createRequestsDues(){
-    let staffList;
-    var request = new XMLHttpRequest();
-    request.open("GET", `${CURRENT_URL}/staff/getRequestedDuesStaff`, false);
-    request.send(null);
-    if (request.status === 200) {
-        staffList = JSON.parse(request.responseText);    
-    }
-    if (staffList && pending_container) {
-        if(staffList.length > 0){
-            let tableHTML = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="padding-right: 20px;">Name</th>
-                            <th style="padding-right: 20px;">Email</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-            staffList.forEach(staff => {
-                tableHTML += `
-                    <tr>
-                        <td style="padding-right: 20px;">${staff.name}</td>
-                        <td style="padding-right: 20px;">${staff.email}</td>
-                        <td><button onclick="approveStaff('${staff.email}')">Approve</button></td>
-                    </tr>
-                `;
-            });
-            tableHTML += `
-                    </tbody>
-                </table>
-            `;
-            // ${staffAdminList}
-            pending_container.innerHTML += tableHTML;
-        }
-        else{
-            pending_container.innerHTML += `
-                <p> No Dues Request </p>
-            `
-        }
-    }
+                      selectElement.appendChild(option);
+                  });
+                  const choices = new Choices(selectElement, {
+                    removeItemButton: true, 
+                  });
+                  selectElement.addEventListener('change', function() {
+                    selectedAdmins = Array.from(this.selectedOptions).map(option => option.value);
+                });
+              }
+              else{
+                  pending_container.innerHTML += `
+                      <h4 class='no-dues-msg' > No Initiation Request </h4>
+                  `
+              }
+          }
+      };
+      request.send();
+  }
+  
+  window.onload = function() {
+      createRequestsDues();
+  }
+
+
+function approveStaff(staffMail, all_dept=false) {
+  let dept = []
+  if(all_dept){
+    dept = staffAdminList
+  }
+  else{
+    dept = selectedAdmins
+  }
+  var request = new XMLHttpRequest();
+  request.open("GET", `${CURRENT_URL}/staff/completeRequestForDues/${staffMail}/${dept}`, false);
+  request.send(null);
+  window.location.reload();
 }
-createRequestsDues()
-function approveStaff(staffMail) {
-    var request = new XMLHttpRequest();
-    request.open("GET", `${CURRENT_URL}/staff/completeRequestForDues/${staffMail}`, false);
-    request.send(null);
-    console.log("Appel", request.responseText)
+
+function rejectStaff(staffMail) {
+  var request = new XMLHttpRequest();
+  request.open("GET", `${CURRENT_URL}/staff/cancelRequestForDues/${staffMail}`, false);
+  request.send(null);
+  window.location.reload();
 }
