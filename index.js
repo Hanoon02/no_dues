@@ -117,6 +117,8 @@ app.listen(port, async (err) => {
 
   //Professors List
   var spreadsheetId = "1L-mCmog-GlNVKQlV_6Jvo9WyQKZpr-S346ijUlPj0gM";
+  // Staff List
+  staff_spreadsheetId = "1AUzN6SVmAA7J3cDgfIBfKUovnJJ90YYdfsY3b7OjpBY"
   var auth = new google.auth.GoogleAuth({
     keyFile: "credentials.json",
     scopes: "https://www.googleapis.com/auth/spreadsheets",
@@ -144,6 +146,32 @@ app.listen(port, async (err) => {
       fs.writeFile(
         "./data/professors.json",
         JSON.stringify(professors_data),
+        (err) => {
+          if (err) {
+            console.log("Error in writing to admins file: ", err);
+            return;
+          }
+        }
+      );
+    }
+  });
+
+  var staff_sheet_data = await googleSheets.spreadsheets.values.get({
+    auth: auth,
+    spreadsheetId: staff_spreadsheetId,
+    range: "Sheet1",
+  });
+  staff_list_data = staff_sheet_data.data.values;
+  staff_list_data.shift();
+  fs.readFile("./data/staff.json", (err, data) => {
+    if (err) {
+      console.log("Error in writing to admins file: ", err);
+      return;
+    }
+    if (data != JSON.stringify(staff_list_data)) {
+      fs.writeFile(
+        "./data/staff.json",
+        JSON.stringify(staff_list_data),
         (err) => {
           if (err) {
             console.log("Error in writing to admins file: ", err);

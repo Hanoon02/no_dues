@@ -35,7 +35,7 @@ module.exports.request = async(req, res) => {
     var obj = JSON.parse(req.params.obj)[0];
     var studentEmail = obj.studentEmail;
     var adminName = obj.adminName;
-    var hostelTaken = obj.hostelTaken;
+    var hostelTaken = null;
     var updateObject = {};
     updateObject[adminName + "Applied"] = true;
     var today = new Date();
@@ -51,25 +51,25 @@ module.exports.request = async(req, res) => {
     updateObject[adminName + "AppliedAt"] = dateTime;
     updateObject["hostelTaken"] = hostelTaken;
     await User.findOneAndUpdate(
-      { email: obj["studentEmail"] },
+      { email: studentEmail },
       updateObject,
       (err, user) => {
         if (err) {
           console.log("Error in updating request status: ", err);
-          return res.redirect("/");
+          return res.redirect("/staff");
         }
         if(!user){
           console.log("User not defined");
-          return res.redirect("/");
+          return res.redirect("/staff");
         }
         user.save();
       }
     );
-    return res.redirect("/");
+    return res.redirect("/staff");
   } catch (err) {
     console.log(err);
     req.flash("error", "Something Went Wrong. Please Try Again or Later!");
-    return res.redirect("/");
+    return res.redirect("/staff");
   }
 };
 
@@ -252,7 +252,7 @@ module.exports.startStaffNoDuesRequest = (req, res) =>{
       try {
         user['staffRequestNoDues'] = 'Active'
         await user.save();
-        approved_mailer.startStaffDuesRequest('', email);
+        approved_mailer.startStaffDuesRequest(email);
         res.status = 200;
         return res.end();
       } catch (e) {
@@ -269,7 +269,60 @@ module.exports.startStaffNoDuesRequest = (req, res) =>{
   }
 }
 
+async function sendRequests(listOfObjs) {
+  for (var obj in listOfObjs) {
+      await fetch(`${CURRENT_URL}/staff/request/${JSON.stringify(obj)}`);
+  }
+}
+
 module.exports.completeStaffNoDuesRequest = (req, res) =>{
+  try {
+    email = req.params.user
+    depts = req.params.departments
+    User.findOne({ email: email }, async (err, user) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      try {
+        var listOfObjs = [];
+        console.log(depts)
+        for (var dept_name in depts) {
+          var obj = [];
+          obj.push({
+            studentEmail: email,
+            adminName: dept_name,
+          });
+          listOfObjs.push(obj);
+        }
+        console.log(listOfObjs)
+        // for (var obj in listOfObjs) {
+        //   var request = new XMLHttpRequest();
+        //   request.open("GET", `${CURRENT_URL}/staff/request/${JSON.stringify(obj)}`, false);
+        //   request.send(null);
+        //   // window.location.href = `${CURRENT_URL}/staff/request/${JSON.stringify(obj)}`;
+        // }
+        // sendRequests(listOfObjs);
+        // user['staffRequestNoDues'] = 'Complete'
+        // await user.save();
+        res.status = 200;
+        // approved_mailer.completeStaffDuesRequest(email);
+        return res.end();
+      } catch (e) {
+        console.log(e);
+        req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+        res.status = 500;
+        return res.end();
+      }});
+  } catch (err) {
+    console.log(err);
+    req.flash("error", "Something Went Wrong. Please Try Again or Later!");
+    res.status = 500;
+    return res.end();
+  }
+}
+
+module.exports.cancelStaffNoDuesRequest = (req, res) =>{
   try {
     email = req.params.user
     User.findOne({ email: email }, async (err, user) => {
@@ -278,10 +331,10 @@ module.exports.completeStaffNoDuesRequest = (req, res) =>{
         return;
       }
       try {
-        user['staffRequestNoDues'] = 'Complete'
+        user['staffRequestNoDues'] = 'None'
         await user.save();
         res.status = 200;
-        approved_mailer.completeStaffDuesRequest('', email);
+        approved_mailer.cancelStaffDuesRequest(email);
         return res.end();
       } catch (e) {
         console.log(e);

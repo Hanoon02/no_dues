@@ -313,7 +313,7 @@ passport.use(
                 if (err) {
                   console.log(
                     "Error in creating user google strategy-passport",
-                    err
+                    err, user
                   );
                   return;
                 }

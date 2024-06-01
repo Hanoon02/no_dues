@@ -109,7 +109,7 @@ exports.approvedDuesForStaff = async (admin, email) => {
 };
 
 
-exports.startStaffDuesRequest = async (admin, email) => {
+exports.startStaffDuesRequest = async (email) => {
     let htmlString = `
             <div>
                 <p>Hi Admin!</p>
@@ -124,7 +124,7 @@ exports.startStaffDuesRequest = async (admin, email) => {
     nodemailer.transporter.sendMail(
       {
         from: `${NODEMAILER_EMAIL_ID}`,
-        to: 'ahmed21006@iiitd.ac.in',
+        to: email,
         subject: sub,
         html: htmlString,
       },
@@ -139,7 +139,7 @@ exports.startStaffDuesRequest = async (admin, email) => {
 }
 
 
-exports.completeStaffDuesRequest = async (admin, email) => {
+exports.completeStaffDuesRequest = async (email) => {
   let htmlString = `
           <div>
               <p>Hi ${fetchName(email)}!</p>
@@ -154,7 +154,36 @@ exports.completeStaffDuesRequest = async (admin, email) => {
   nodemailer.transporter.sendMail(
     {
       from: `${NODEMAILER_EMAIL_ID}`,
-      to: 'ahmed21006@iiitd.ac.in',
+      to: email,
+      subject: sub,
+      html: htmlString,
+    },
+    (err, info) => {
+      if (err) {
+        console.log("Error in sending mail", err);
+        return;
+      }
+      return;
+    }
+  );
+}
+
+exports.cancelStaffDuesRequest = async (email) => {
+  let htmlString = `
+          <div>
+              <p>Hi ${fetchName(email)}!</p>
+              <br>
+              <p> The admin has cancel your NoDues request, kindly re apply or check with admin</p>
+              <br>
+              <p>Thanks!</p>
+          </div>`;
+
+  let sub = `No Dues Request Rejected`;
+
+  nodemailer.transporter.sendMail(
+    {
+      from: `${NODEMAILER_EMAIL_ID}`,
+      to: email,
       subject: sub,
       html: htmlString,
     },
