@@ -36,6 +36,7 @@ function format(name) {
 let admins = [];
 let original = {};
 let adminEmails = {};
+let nameToEmail = {};
 
 module.exports.addAdmins = (data) => {
   for (var i = 1; i < data.length; i++) {
@@ -60,6 +61,7 @@ module.exports.addAdmins = (data) => {
       if (j != "") {
         mails.push(mail);
         adminEmails[mail] = adminName;
+        nameToEmail[adminName] = mail;
       } else {
         break;
       }
@@ -88,6 +90,10 @@ module.exports.findAdmin = (email) => {
     return "student";
   }
 };
+
+module.exports.fetchEmailFromAdmin = (name) => {
+  return nameToEmail[name];
+}
 
 module.exports.getOriginalAdmin = (adminName) => {
   return original[adminName];

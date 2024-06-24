@@ -4,6 +4,8 @@ const router = express.Router();
 
 router.get("/", staffController.home);
 router.get("/getAdmins", staffController.getAdmins);
+router.get("/getFilteredAdmins", staffController.getFilteredAdmins);
+router.get("/getStaffs/:status",staffController.getStaffs);
 router.get("/request/:obj", staffController.request);
 router.get("/getAdmin/:admin", staffController.getAdminDetails);
 router.get("/admin_home", staffController.adminHome)

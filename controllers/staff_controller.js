@@ -2,6 +2,9 @@ const { CURRENT_URL } = require("../config/config")
 const StaffAdmin = require("../models/staffAdmin");
 const User = require("../models/user")
 const approved_mailer = require("../mailers/approved_mailer");
+var XMLHttpRequest = require("xhr2");
+var xhr = new XMLHttpRequest();
+const axios = require("axios");
 
 module.exports.home = (req, res) => {
   var obj = [];
@@ -16,10 +19,58 @@ module.exports.home = (req, res) => {
     });
   };
 
+module.exports.getFilteredAdmins = (req, res) => {
+  all_admins = StaffAdmin.admins;
+  const userPlainObject = req.user.toObject();
+  const keysWithApplied = Object.keys(userPlainObject).filter(key => key.endsWith("Applied"));
+  const modifiedKeys = keysWithApplied.map(key => key.replace("Applied", ""));
+  return res.status(200).json(modifiedKeys);
+};
+
 module.exports.getAdmins = (req, res) => {
   return res.status(200).json(StaffAdmin.admins);
 };
 
+
+module.exports.getStaffs = (req, res) => {
+  let studentList = [];
+  let status=req.params.status;
+  User.find({}, (err, users) => {
+    if (err) {
+      console.log("Error in loading all the users");
+      return;
+    }
+
+    for (var i in users) {
+      
+      if (users[i]["type"] == 'Staff' && checkSuperAdmin(users[i],status,'nodues')) {
+        if (status == "accepted" && users[i]['nodues'] && users[i]["noduesApprovedAt"]) {
+          let d1=new Date(users[i]["noduesApprovedAt"]);
+          let d2= new Date();
+          d2.setFullYear(d2.getFullYear()-1);
+          
+          if( d1.getTime()<d2.getTime()){
+            continue;
+          }
+
+        }
+        studentList.push(users[i]);
+      }
+    }
+    return res.status(200).json(studentList);
+  });
+};
+
+function checkSuperAdmin(student, curr_status,superAdminName) {
+  console.log("CHECK", student[superAdminName])
+  if (curr_status == "pending") {
+    return student[superAdminName] == null;
+  } else if (curr_status == "accepted") {
+    return student[superAdminName] == true;
+  } else {
+    return student[superAdminName] == false;
+  }
+}
 
 module.exports.getAdminDetails = (req, res) => {
   StaffAdmin.db.find({ admin: req.params.admin }, function (err, adminObj) {
@@ -35,6 +86,7 @@ module.exports.request = async(req, res) => {
     var obj = JSON.parse(req.params.obj)[0];
     var studentEmail = obj.studentEmail;
     var adminName = obj.adminName;
+    var adminMail = StaffAdmin.fetchEmailFromAdmin(adminName);
     var hostelTaken = null;
     var updateObject = {};
     updateObject[adminName + "Applied"] = true;
@@ -56,20 +108,21 @@ module.exports.request = async(req, res) => {
       (err, user) => {
         if (err) {
           console.log("Error in updating request status: ", err);
-          return res.redirect("/staff");
+          // return res.redirect("/staff");
         }
         if(!user){
           console.log("User not defined");
-          return res.redirect("/staff");
+          // return res.redirect("/staff");
         }
         user.save();
       }
     );
-    return res.redirect("/staff");
+    approved_mailer.remindAdmin(studentEmail, adminMail);
+    // return res.redirect("/staff");
   } catch (err) {
     console.log(err);
     req.flash("error", "Something Went Wrong. Please Try Again or Later!");
-    return res.redirect("/staff");
+    // return res.redirect("/staff");
   }
 };
 
@@ -124,7 +177,7 @@ module.exports.getRequestedDuesStaff = (req, res) => {
     }
     for (var i in users) {
       if (
-        users[i]["type"] == 'staff' &&
+        users[i]["type"] == 'Staff' &&
         users[i]["staffRequestNoDues"] == 'Active')
       {
         staffList.push(users[i]);
@@ -150,7 +203,7 @@ module.exports.getStaffAdmin = (req, res) => {
       {
         if(check(users[i],status,adminName)){
           if (status == "accepted" && users[i]['nodues'] && users[i]["noduesApprovedAt"]) {
-            let d1=new Date(users[i]["noduesApprovedAt"]);
+            let d1= new Date(users[i]["noduesApprovedAt"]);
             let d2= new Date();
             d2.setFullYear(d2.getFullYear()-1);
             
@@ -270,7 +323,7 @@ module.exports.startStaffNoDuesRequest = (req, res) =>{
 }
 
 async function sendRequests(listOfObjs) {
-  for (var obj in listOfObjs) {
+  for (var obj of listOfObjs) {
       await fetch(`${CURRENT_URL}/staff/request/${JSON.stringify(obj)}`);
   }
 }
@@ -279,6 +332,7 @@ module.exports.completeStaffNoDuesRequest = (req, res) =>{
   try {
     email = req.params.user
     depts = req.params.departments
+    deptList = depts.split(',');
     User.findOne({ email: email }, async (err, user) => {
       if (err) {
         console.log(err);
@@ -286,8 +340,7 @@ module.exports.completeStaffNoDuesRequest = (req, res) =>{
       }
       try {
         var listOfObjs = [];
-        console.log(depts)
-        for (var dept_name in depts) {
+        for (var dept_name of deptList) {
           var obj = [];
           obj.push({
             studentEmail: email,
@@ -295,18 +348,11 @@ module.exports.completeStaffNoDuesRequest = (req, res) =>{
           });
           listOfObjs.push(obj);
         }
-        console.log(listOfObjs)
-        // for (var obj in listOfObjs) {
-        //   var request = new XMLHttpRequest();
-        //   request.open("GET", `${CURRENT_URL}/staff/request/${JSON.stringify(obj)}`, false);
-        //   request.send(null);
-        //   // window.location.href = `${CURRENT_URL}/staff/request/${JSON.stringify(obj)}`;
-        // }
-        // sendRequests(listOfObjs);
-        // user['staffRequestNoDues'] = 'Complete'
-        // await user.save();
+        sendRequests(listOfObjs); 
+        user['staffRequestNoDues'] = 'Complete'
+        await user.save();
         res.status = 200;
-        // approved_mailer.completeStaffDuesRequest(email);
+        approved_mailer.completeStaffDuesRequest(email);
         return res.end();
       } catch (e) {
         console.log(e);
@@ -335,7 +381,7 @@ module.exports.cancelStaffNoDuesRequest = (req, res) =>{
         await user.save();
         res.status = 200;
         approved_mailer.cancelStaffDuesRequest(email);
-        return res.end();
+        return res.end(); 
       } catch (e) {
         console.log(e);
         req.flash("error", "Something Went Wrong. Please Try Again or Later!");

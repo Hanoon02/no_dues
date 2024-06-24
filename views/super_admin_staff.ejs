@@ -80,12 +80,12 @@
     <div class="container details-box mt-3 mb-2">
     
       <div class='details-heading text-center'>
-        <h4> LIST OF STUDENTS </h4>
+        <h4> LIST OF STAFF <h5>Pending Requests Count: <span id="pending-counter">0</span></h5> </h4>
       </div>
 
       <div class="row mt-3">
         <div class="col-lg-12">
-          <h5>Pending Requests Count: <span id="pending-counter">0</span></h5>
+          
         </div>
       </div>
 
@@ -121,39 +121,6 @@
     
           <div class="row d-flex flex-row justify-content-around align-items-center" data-aos="fade-up"
             data-aos-delay="100">
-    
-            <select class="filter form-select mt-2 mb-2" name="degree" id="degree" onclick="clickFilter()">
-              <option value="All">Degree (All)</option>
-              <option selected value="B. Tech">B.Tech</option>
-              <option value="M. Tech">M.Tech</option>
-              <option value="Phd">Phd</option>
-            </select>
-    
-            <select class="filter form-select mt-2 mb-2" aria-label="Default select example" name="department"
-              id="department">
-              <option value="All">Branch(All)</option>
-              <option value="CSE">CSE</option>
-              <option selected value="Maths">MATHS</option>
-              <option value="CB">CB</option>
-              <option value="SSH">SSH</option>
-              <option value="ECE">ECE</option>
-              <option value="HCD">HCD</option>
-            </select>
-    
-            <div class="input-group mt-2 mb-2 batch-filter">
-              <input class="form-control" type="number" id="batch" name="batch" placeholder="BATCH">
-    
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary" id="batchButton" type="button"><i class="bi bi-search"></i></button>
-              </div>    
-            </div>
-
-            <select class="filter form-select mt-2 mb-2" name="clearance" id="clearance">
-              <option value="all">Clearance(All)</option>
-              <option value="complete">All Clear</option>
-              <option value="none">None Clear</option>
-              <option value="some">Some Clear</option>
-            </select>
     
             <!--Utility-->
             <div class="btn-group utility mt-2 mb-2" role="group">

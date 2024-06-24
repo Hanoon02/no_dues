@@ -1,18 +1,94 @@
 [
-["Admin","Name","Location","Email Id 1","Email Id 2","Email Id 3"],
-["Internships & Placement","Ahmed Hanoon","","iap@iiitd.ac.in"],
-["Academics (Staff)","Ahmed Hanoon","","astaff@iiitd.ac.in"],
-["Library & Information Centre","Ahmed Hanoon","","laic@iiitd.ac.in"],
-["Stores & Purchases","Ahmed Hanoon","","sap@iiitd.ac.in"],
-["System Admin & Networking","Ahmed Hanoon","","saan@iiitd.ac.in"],
-["IRD","Ahmed Hanoon","","ird@iiitd.ac.in"],
-["Facilities and Estate Office","Ahmed Hanoon","","faeo@iiitd.ac.in"],
-["Student Affairs","Ahmed Hanoon","","sa@iiitd.ac.in"],
-["Department Office (CSE)","Ahmed Hanoon","","docse@iiitd.ac.in"],
-["Incubation Center","Ahmed Hanoon","","ic@iiitd.ac.in"],
-["Finance & Accounts","Ahmed Hanoon","","faa@iiitd.ac.in"],
-["Director's Office","Ahmed Hanoon","","do@iiitd.ac.in"],
-["DoFA Office","Ahmed Hanoon","","dofao@iiitd.ac.in"],
-["Human Resources","Ahmed Hanoon","","hr@iiitd.ac.in"]
+    [
+        "Admin",
+        "Name",
+        "Location",
+        "Email Id 1",
+        "Email Id 2",
+        "Email Id 3"
+    ],
+    [
+        "Internships & Placement",
+        "Ahmed Hanoon",
+        "ahmed21006@iiitd.ac.in",
+        "iap@iiitd.ac.i"
+    ],
+    [
+        "Academics (Staff)",
+        "Ahmed Hanoon",
+        "ahmed21006@iiitd.ac.in",
+        "astaff@iiitd.ac.i"
+    ],
+    [
+        "Library & Information Centre",
+        "Ahmed Hanoon",
+        "ahmed21006@iiitd.ac.in",
+        "laic@iiitd.ac.i"
+    ],
+    [
+        "Stores & Purchases",
+        "Ahmed Hanoon",
+        "ahmed21006@iiitd.ac.in",
+        "sap@iiitd.ac.i"
+    ],
+    [
+        "System Admin & Networking",
+        "Ahmed Hanoon",
+        "ahmed21006@iiitd.ac.in",
+        "saan@iiitd.ac.i"
+    ],
+    [
+        "IRD",
+        "Ahmed Hanoon",
+        "ahmed21006@iiitd.ac.in",
+        "ird@iiitd.ac.i"
+    ],
+    [
+        "Facilities and Estate Office",
+        "Ahmed Hanoon",
+        "ahmed21006@iiitd.ac.in",
+        "faeo@iiitd.ac.i"
+    ],
+    [
+        "Student Affairs",
+        "Ahmed Hanoon",
+        "ahmed21006@iiitd.ac.in",
+        "sa@iiitd.ac.i"
+    ],
+    [
+        "Department Office (CSE)",
+        "Ahmed Hanoon",
+        "ahmed21006@iiitd.ac.in",
+        "docse@iiitd.ac.i"
+    ],
+    [
+        "Incubation Center",
+        "Ahmed Hanoon",
+        "ahmed21006@iiitd.ac.in",
+        "ic@iiitd.ac.i"
+    ],
+    [
+        "Finance & Accounts",
+        "Ahmed Hanoon",
+        "ahmed21006@iiitd.ac.in",
+        "faa@iiitd.ac.i"
+    ],
+    [
+        "Director's Office",
+        "Ahmed Hanoon",
+        "ahmed21006@iiitd.ac.in",
+        "do@iiitd.ac.i"
+    ],
+    [
+        "DoFA Office",
+        "Ahmed Hanoon",
+        "ahmed21006@iiitd.ac.in",
+        "dofao@iiitd.ac.i"
+    ],
+    [
+        "Human Resources",
+        "Ahmed Hanoon",
+        "ahmed21006@iiitd.ac.in",
+        "hr@iiitd.ac.i"
+    ]
 ]
-

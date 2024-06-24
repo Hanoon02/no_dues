@@ -5,7 +5,7 @@ const CURRENT_URL = JSON.parse(
 let admins_list=[];
 
 var request = new XMLHttpRequest();
-request.open("GET", `${CURRENT_URL}/staff/getAdmins`, false);
+request.open("GET", `${CURRENT_URL}/staff/getFilteredAdmins`, false);
 request.send(null);
 if (request.status === 200) {
   admins_temp = JSON.parse(request.responseText);
@@ -31,8 +31,53 @@ var request_button_container = document.getElementById('request-dues-container')
 //   }
 // }
 // duesRequestButton()
+
+function updateStatusMessage(user, admin) {
+  var status = document.getElementsByClassName(admin + "Status")[0];
+
+  //Rejected
+  if (user[0][admin + "Message"] && !user[0][admin]) {
+
+    let displayFine = "NA";
+    if (user[0][admin + "Fine"]) {
+      displayFine = user[0][admin + "Fine"];
+    }
+
+    document.getElementsByClassName(admin + "Message")[0].innerHTML = user[0][admin + "Message"];
+    document.getElementsByClassName(admin + "Fine")[0].innerHTML = displayFine;
+    status.classList.remove("request");
+    status.classList.remove("accepted");
+    status.classList.add("rejected");
+    status.classList.remove("pending");
+    status.innerHTML = "Rejected";
+  }
+  //Pending
+  else if (user[0][admin + "Applied"] && !user[0][admin]) {    
+    status.classList.remove("request");
+    status.classList.remove("accepted");
+    status.classList.remove("rejected");
+    status.classList.add("pending");
+    status.innerHTML = "Pending";
+  } 
+  
+  //Accepted
+  else if (user[0][admin + "Applied"] && user[0][admin] == true) {
+    status.classList.remove("request");
+    status.classList.add("accepted");
+    status.classList.remove("rejected");
+    status.classList.remove("pending");
+  
+    document.getElementsByClassName(admin + "Message")[0].innerHTML = "Dues for this department has been approved";
+    document.getElementsByClassName(admin + "Fine")[0].innerHTML = "NA";
+    status.innerHTML = "Accepted";
+  }
+}
+
 if(user[0]['staffRequestNoDues']==='Complete'){
   admins_list.map(createRequest);
+  for (var i in admins_list) {
+    updateStatusMessage(user, admins_list[i]);
+  }
 }
 else if(user[0]['staffRequestNoDues']==='Active'){
   container.innerHTML+=`

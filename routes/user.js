@@ -28,7 +28,7 @@ router.get(
   passport.checkAuthentication,
   userController.getProfessors
 );
-router.get("/failedSignIn", userController.failedSignIn);
+router.get("failedSignIn/", userController.failedSignIn);
 router.get("/getProfessorName/:profEmail", userController.getProfessorName);
 router.get(
   "/getStudents/:status",

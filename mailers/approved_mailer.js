@@ -196,3 +196,32 @@ exports.cancelStaffDuesRequest = async (email) => {
     }
   );
 }
+
+exports.remindAdmin = async (staff, admin) => {
+  let htmlString = `
+          <div>
+              <p>Hi ${fetchName(admin)}!</p>
+              <br>
+              <p> ${fetchName(staff)} has requested for Dues from your department. Kindly login to https://nodues.iiitd.edu.in/ and check it out</p>
+              <br>
+              <p>Thanks!</p>
+          </div>`;
+
+  let sub = `No Dues Request`;
+
+  nodemailer.transporter.sendMail(
+    {
+      from: `${NODEMAILER_EMAIL_ID}`,
+      to: admin,
+      subject: sub,
+      html: htmlString,
+    },
+    (err, info) => {
+      if (err) {
+        console.log("Error in sending mail", err);
+        return;
+      }
+      return;
+    }
+  );
+}

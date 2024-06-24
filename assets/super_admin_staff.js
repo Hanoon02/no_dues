@@ -292,70 +292,14 @@ const CURRENT_URL = JSON.parse(
     }
   }
   
-  function isTrue(student) {
-    
-    var curr_degree = document.getElementById("degree").value;
-    var curr_department = document.getElementById("department").value;
-    var curr_batch = document.getElementById("batch").value;
-    var clearance = document.getElementById("clearance").value;
-  
-    var k = "none";
-    if (adminsLeft(student)==1) {
-      k = "complete";
-    }
-    else if(adminsLeft(student)==2){
-      k= "some"
-    }
-  
-    var checkDegree = curr_degree == student["degree"];
-    var checkDepartment = curr_department == student["department"];
-    var checkBatch = curr_batch == student["batch"];
-  
-    var checkClearance = clearance == k;
-  
-    if (!curr_batch) {
-      curr_batch = -1;
-    }
-  
-    if (clearance == "all") {
-      checkClearance = true;
-    }
-  
-    if (curr_degree == "All") {
-      checkDegree = true;
-    }
-  
-    if (curr_department == "All") {
-      checkDepartment = true;
-    }
-  
-    if (curr_batch == -1) {
-      checkBatch = true;
-    }
-  
-    return (
-      checkClearance &&
-      checkDegree &&
-      checkDepartment &&
-      checkBatch
-    );
-  }
-  
   //Applying filters and adding request components
   function clickFilter() {
     let curr_status = document.getElementsByClassName("status")[0].id;
-    var curr_batch = document.getElementById("batch").value;
-  
-    if (!curr_batch) {
-      curr_batch = -1;
-    }
-  
+    curr_batch = -1;
     var currentList = [];
   
     for (var i in studentList) {
-      if (isTrue(studentList[i])) {
-        currentList.push(studentList[i]);
-      }
+      currentList.push(studentList[i]);
     }
   
     if (curr_status == "accepted") {
@@ -469,7 +413,7 @@ const CURRENT_URL = JSON.parse(
   function applyStatus() {
     let curr_status = document.getElementsByClassName("status")[0].id;
     var request = new XMLHttpRequest();
-    request.open("GET", `${CURRENT_URL}/user/getStudents/${curr_status}`, false);
+    request.open("GET", `${CURRENT_URL}/staff/getStaffs/${curr_status}`, false);
     request.send();
     if (request.status === 200) {
       studentList = JSON.parse(request.responseText);
@@ -572,7 +516,6 @@ const CURRENT_URL = JSON.parse(
     btn.addEventListener("click",clickFilter);
   });
   
-  document.getElementById('batchButton').addEventListener('click',clickFilter);
   
   //Functionality of reject button in accordion button
   function clickAlternate(e){  
