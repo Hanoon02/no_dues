@@ -130,13 +130,31 @@ passport.checkProffAuthentication = (req, res, next) => {
 };
 
 //Check for Staff or Student
-passport.checkStaff = (req, res, next) => {
+passport.checkPortalAccessType = (req, res, next) => {
+  type = "Staff"
   if (req.isAuthenticated()) {
-    if (getStaffName.isStaff(req.user.email)) {
+    const isStaff = getStaffName.isStaff(req.user.email);
+
+    if (isStaff && type === "Staff") {
       return res.redirect("/staff");
     }
+    else if (isStaff && type === "Student") {
+      req.flash("error", "Invalid Access for Staff to Student Portal");
+      return res.redirect("/user/signin");  // Ensure this doesn't cause a loop
+    }
+    else if (!isStaff && type === "Staff") {
+      req.flash("error", "Invalid Access for Non-Staff to Staff Portal");
+      return res.redirect("/user/signin");  // Ensure this doesn't cause a loop
+    }
+    else {
+      req.flash("error", "Invalid Access");
+      return res.redirect("/user/signin");  // Ensure this doesn't cause a loop
+    }
   }
-  next();
+  // If not authenticated, direct them to sign in
+  else {
+    return res.redirect("/user/signin");
+  }
 };
 
 //check if superAdmin

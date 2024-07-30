@@ -32,7 +32,11 @@
         action="/user/auth/google"
       >
         <div class="form-wrap" style="position: relative">
-          <h2>Staff Portal</h2>
+          <div class="portal-picker">
+            <p class="portal" id="studentPortal">Student</p>
+            <p class="portal" id="staffPortal">Staff</p>
+          </div>
+          <div class="divider"></div>
           <!-- <div class="form-group">
                       <div class="relative">
                           <input class="form-control" name="email" id="name" type="text" autofocus="" title="" autocomplete="" placeholder="Email Address">
@@ -57,9 +61,6 @@
               ></a>
             </div>
           </div>
-        </div>
-        <div class="sign-up">
-          <small>Students must use this - <a href="https://nodues.fh.iiitd.edu.in/" target="_blank">STUDENT PORTAL</a></small>
         </div>
       </form>
       <form class="form-horizontal signup" method="POST" action="/user/create">

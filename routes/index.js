@@ -8,7 +8,7 @@ router.get(
   "/",
   passport.checkAuthentication,
   passport.checkUserAuthentication,
-  passport.checkStaff,
+  passport.checkPortalAccessType,
   homeController.home
 );
 router.get(

@@ -30,8 +30,8 @@ a:hover{
     text-decoration: none;
 }
 .form {
-    max-width: calc(100vw - 40px);
-    width: 420px;
+    max-width: calc(100vw - 0px);
+    width: 500px;
     height: auto;
     background: rgba(255, 255, 255, 1);
     padding: 30px;
@@ -209,4 +209,53 @@ hr{
     color: #FFF;
     border-color: #1e439b;
     box-shadow: none;
+}
+
+.portal-picker {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+  
+.portal {
+    display: flex;
+    align-items: center; /* Centers text vertically inside the button */
+    padding: 8px 30px; /* Adjust padding as needed */
+    margin: 5px;
+    cursor: pointer;
+    background-color: grey;
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    font-size: 16px; /* Adjust font size as needed */
+    box-sizing: border-box; /* Ensures padding is included in width/height */
+    opacity: 0.5;
+    border: 2px solid transparent; /* Ensure border size is consistent across states */
+}
+  
+.active {
+    background-color: white;  /* Keep background white or change as needed */
+    color: red;  /* Red text for active portal */
+    border: 2px solid red;  /* Red border for active portal */
+    opacity: 1; /* Fully opaque for active */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+  
+.inactive {
+    background-color: grey;
+    color: white;
+    border: 2px solid transparent;
+}
+
+.inactive:hover {
+    background-color: #000000; /* Darker shade for hover effect */
+}
+
+.divider {
+    height: 5px; /* Thickness of the divider */
+    background-color: rgb(161, 38, 38); /* Color of the divider */
+    width: 100%; /* Makes the divider stretch across the container */
+    margin-top: 10px; /* Space above the divider */
+    margin-bottom: 5px; /* Space below the divider */
 }

@@ -12,3 +12,15 @@ pass.attr("type", "text");
 pass.attr("type", "password");
 }
 })
+
+document.addEventListener('DOMContentLoaded', function() {
+    var portals = document.querySelectorAll('.portal');
+    portals.forEach(portal => {
+        portal.addEventListener('click', function() {
+            portals.forEach(p => p.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+    document.getElementById('studentPortal').click(); 
+
+});
