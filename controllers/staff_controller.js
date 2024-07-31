@@ -62,7 +62,6 @@ module.exports.getStaffs = (req, res) => {
 };
 
 function checkSuperAdmin(student, curr_status,superAdminName) {
-  console.log("CHECK", student[superAdminName])
   if (curr_status == "pending") {
     return student[superAdminName] == null;
   } else if (curr_status == "accepted") {

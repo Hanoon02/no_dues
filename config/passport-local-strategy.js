@@ -6,7 +6,7 @@ const getProffName = require("../data/getProffName");
 const getStaffName = require("../data/isStaff")
 
 const User = require("../models/user");
-const { EMAIL_ID, SUPER_ADMIN_EMAIL,MAIN_EXCEL_ID,BANK_EXCEL_ID } = require("../config/config");
+const { EMAIL_ID, SUPER_ADMIN_EMAIL,SUPER_ADMIN_STAFF_EMAIL,MAIN_EXCEL_ID,BANK_EXCEL_ID } = require("../config/config");
 const { ADMIN_BLOCK, STUDENT_BLOCK } = require("../controllers/home_controller");
 const { head } = require("request-promise");
 
@@ -107,7 +107,7 @@ passport.checkUserAuthentication = (req, res, next) => {
       }
     }
     else if(portalType == "Staff"){
-      if (req.user.email == `${SUPER_ADMIN_EMAIL}`) {
+      if (req.user.email == `${SUPER_ADMIN_STAFF_EMAIL}`) {
         return res.redirect("/staff/super_admin");
       } else if (Admin.checkAdmin(req.user.email)) {
         return res.redirect("/staff/admin_home");
