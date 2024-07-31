@@ -93,21 +93,34 @@ passport.checkAdminAuthentication = (req, res, next) => {
 
 //check if it's a normal User
 passport.checkUserAuthentication = (req, res, next) => {
-  
+  portalType = req.session.portalType;
   if (req.isAuthenticated()) {
-    if (req.user.email == `${SUPER_ADMIN_EMAIL}`) {
-      return res.redirect("/super_admin");
-    } else if (Admin.checkAdmin(req.user.email)) {
-      return res.redirect("/admin_home");
-    } else if (getProffName.isProff(req.user.email)) {
-      return res.redirect("/proff_home");
-    } else {
-      return next();
+    if(portalType == "Student"){
+      if (req.user.email == `${SUPER_ADMIN_EMAIL}`) {
+        return res.redirect("/super_admin");
+      } else if (Admin.checkAdmin(req.user.email)) {
+        return res.redirect("/admin_home");
+      } else if (getProffName.isProff(req.user.email)) {
+        return res.redirect("/proff_home");
+      } else {
+        return next();
+      }
+    }
+    else if(portalType == "Staff"){
+      if (req.user.email == `${SUPER_ADMIN_EMAIL}`) {
+        return res.redirect("/staff/super_admin");
+      } else if (Admin.checkAdmin(req.user.email)) {
+        return res.redirect("/staff/admin_home");
+      } else if (getProffName.isProff(req.user.email)) {
+        return res.redirect("/staff/proff_home");
+      } else {
+        return res.redirect("/staff");
     }
   }
 
   req.flash("error", "Invalid Access");
   return res.redirect("/user/signin");
+}
 };
 
 //check if it's Proffesor
@@ -127,34 +140,6 @@ passport.checkProffAuthentication = (req, res, next) => {
   }
   req.flash("error", "Invalid Access");
   return res.redirect("/user/signin");
-};
-
-//Check for Staff or Student
-passport.checkPortalAccessType = (req, res, next) => {
-  type = "Staff"
-  if (req.isAuthenticated()) {
-    const isStaff = getStaffName.isStaff(req.user.email);
-
-    if (isStaff && type === "Staff") {
-      return res.redirect("/staff");
-    }
-    else if (isStaff && type === "Student") {
-      req.flash("error", "Invalid Access for Staff to Student Portal");
-      return res.redirect("/user/signin");  // Ensure this doesn't cause a loop
-    }
-    else if (!isStaff && type === "Staff") {
-      req.flash("error", "Invalid Access for Non-Staff to Staff Portal");
-      return res.redirect("/user/signin");  // Ensure this doesn't cause a loop
-    }
-    else {
-      req.flash("error", "Invalid Access");
-      return res.redirect("/user/signin");  // Ensure this doesn't cause a loop
-    }
-  }
-  // If not authenticated, direct them to sign in
-  else {
-    return res.redirect("/user/signin");
-  }
 };
 
 //check if superAdmin

@@ -14,8 +14,12 @@ router.post(
   userController.createSession
 );
 router.get("/signout", userController.destroySession);
-router.get(
-  "/auth/google",
+router.get("/auth/google", (req, res, next) => {
+  if (req.query.portal) {
+      req.session.portalType = req.query.portal;
+  }
+  next();
+  },
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 router.get(
